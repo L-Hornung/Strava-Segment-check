@@ -1,4 +1,4 @@
-# Strava Segment Analysis
+# Strava Segment Analysis 
 
 This project provides tools for analyzing running segments from Strava using the Strava API. It focuses on identifying segments around a location that have slower course records (CRs), which may still be achievable, while filtering out segments with unrealistic times that are faster than the world record.
 
@@ -58,6 +58,3 @@ The tool:
 
 By focusing on achievable segments, athletes can efficiently plan new personal records (PRs) and target realistic goals.  
 
-## License
-
-MIT License

@@ -1,0 +1,29 @@
+# Betriebssystem
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Secrets
+.env
+.env.*
+
+# Abhängigkeiten / Builds
+node_modules/
+dist/
+build/
+out/
+target/
+
+# Logs
+*.log
+
+
+.venv/
+venv/
+
+
+__pycache__/
+*.py[cod]

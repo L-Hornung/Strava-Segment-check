@@ -14,7 +14,7 @@ center_lat, center_lng = 52.513673468165, 13.474815751923392
 radius_km = 1
 
 debug = True  # Set this to False to disable debug output everywhere
-max_segments = 70  # Set the maximum number of segments to analyze
+max_segments = 700  # Set the maximum number of segments to analyze
 
 results_around = analyze_segments_around(client, center_lat, center_lng, radius_km, debug=debug, max_segments=max_segments)
 if len(results_around) < 1:

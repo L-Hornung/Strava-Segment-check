@@ -114,6 +114,9 @@ def analyze_segments_around(client, center_lat, center_lng, radius_km, user_max_
         # Print full stack trace for easier debugging
         import traceback
         traceback.print_exc()
+    with open("liste.txt", "w", encoding="utf-8") as f:
+        for eintrag in segments:
+            f.write(str(eintrag) + "\n")
 
     for segment in segments:
         # Check if XOM is present
@@ -125,31 +128,32 @@ def analyze_segments_around(client, center_lat, center_lng, radius_km, user_max_
 
         try:
             kom_time_s = parse_kom_time(segment["xoms"]["overall"])
+            distance_m = segment["distance"]
+            analysis = analyze_effort(distance_m, kom_time_s)
+
+            if analysis["flag"] == "impossible":
+                category = "impossible"
+            elif analysis["pace_s_per_km"] < user_max_pace_s_per_km:
+                category = "potentially achievable"
+            else:
+                category = "valid but not solvable"
+
+            results.append({
+                "name": segment["name"],
+                "distance_m": distance_m,
+                "kom_s": kom_time_s,
+                "pace_s_per_km": analysis["pace_s_per_km"],
+                "wr_pace_s_per_km": analysis["wr_pace_s_per_km"],
+                "flag": analysis["flag"],
+                "category": category,
+                "id": segment["id"]
+            })
         except Exception as e:
-            if debug:
-                print(f"[DEBUG] Error parsing KOM for segment {segment.get('name', '?')}: {e}")
+            print(f"[DEBUG] Error parsing KOM for segment {segment.get('name', '?')}: {e}")
+            print(segment)
             continue
 
-        distance_m = segment["distance"]
-        analysis = analyze_effort(distance_m, kom_time_s)
 
-        if analysis["flag"] == "impossible":
-            category = "impossible"
-        elif analysis["pace_s_per_km"] < user_max_pace_s_per_km:
-            category = "potentially achievable"
-        else:
-            category = "valid but not solvable"
-
-        results.append({
-            "name": segment["name"],
-            "distance_m": distance_m,
-            "kom_s": kom_time_s,
-            "pace_s_per_km": analysis["pace_s_per_km"],
-            "wr_pace_s_per_km": analysis["wr_pace_s_per_km"],
-            "flag": analysis["flag"],
-            "category": category,
-            "id": segment["id"]
-        })
     #sort by slowest pace first
     results_sorted = sorted(results, key=lambda x: x["pace_s_per_km"], reverse=True)
     return results_sorted
